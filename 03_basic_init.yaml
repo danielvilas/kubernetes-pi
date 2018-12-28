@@ -1,0 +1,28 @@
+---
+- hosts: Master
+  become: yes
+  become_method: sudo
+  vars:
+  - remo_user: pi
+  tasks:
+  - name: Kubectl Config dir for Pi
+    file:
+      path: "~{{ remo_user }}/.kube"
+      state: directory
+      owner: "{{ remo_user }}"
+      mode: 0755
+      group: "{{ remo_user }}"
+  - name: Copy KubeCtl Files for pi
+    shell: "cp /etc/kubernetes/admin.conf ~{{ remo_user }}/.kube/config && chown {{ remo_user }}:{{ remo_user }} ~{{ remo_user }}/.kube/config"
+  - name: Configure Flannel NetWork
+    become: no
+    shell: kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml
+- hosts:
+  - Master 
+  - Nodes
+  become: yes
+  become_method: sudo
+  tasks:
+  - name: Reset ipTables
+    shell: sysctl net.bridge.bridge-nf-call-iptables=1
+  

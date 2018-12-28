@@ -1,0 +1,9 @@
+[server]
+serverpi.local
+
+[Master]
+kubemaster.picluster
+
+[Nodes]
+kubenode1.picluster
+kubenode2.picluster

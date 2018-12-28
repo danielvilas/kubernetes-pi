@@ -1,0 +1,20 @@
+$ORIGIN picluster.
+@       3600 IN SOA serverpi.picluster. hostmaster.picluster. (
+                                2017042745 ; serial
+                                7200       ; refresh (2 hours)
+                                3600       ; retry (1 hour)
+                                1209600    ; expire (2 weeks)
+                                3600       ; minimum (1 hour)
+                                )
+
+picluster. IN NS serverpi.picluster.
+picluster. IN MX 10 serverpi.picluster.
+localhost  IN A 127.0.0.1
+serverpi IN A 192.168.1.2
+kubemaster IN A 192.168.1.10
+kubenode1  IN A 192.168.1.11
+kubenode2  IN A 192.168.1.12
+kubenode3  IN A 192.168.1.13
+*.apps    IN  CNAME kubemaster
+www       IN  A     127.0.0.1
+          IN  AAAA  ::1

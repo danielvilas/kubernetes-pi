@@ -1,0 +1,20 @@
+---
+- hosts: Master
+  become: no
+  become_method: sudo
+  tasks:
+  - name: Copy Dashboard Service File
+    copy:
+        src: ./04_traefik/{{ item }}
+        dest: /tmp/{{ item }}
+        mode: 0644
+    with_items:
+    - 00_rbac.yaml
+    - 01_deployment.yaml
+    - 02_traefik_ui.yaml
+  - name: Deploy RoleBinding
+    shell: kubectl apply -f /tmp/00_rbac.yaml
+  - name: Deploy Traefik
+    shell: kubectl apply -f /tmp/01_deployment.yaml
+  - name: Deploy Traefik-Uis
+    shell: kubectl apply -f /tmp/02_traefik_ui.yaml

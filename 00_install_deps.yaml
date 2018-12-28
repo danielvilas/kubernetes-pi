@@ -1,0 +1,32 @@
+---
+- hosts:
+  - Master 
+  - Nodes
+  become: yes
+  become_method: sudo
+  vars:
+    - docker_version: 18.06
+  tasks:
+  - name: Download Docker Installer
+    get_url:
+        url: http://get.docker.com 
+        dest: /tmp/dockerinstaller.sh
+        mode: 0755
+  - name: Install docker
+    shell: export VERSION={{docker_version}} && sh /tmp/dockerinstaller.sh && sudo usermod pi -aG docker
+  - name: Install docker-compose
+    apt:
+      name: docker-compose
+  - name: Turn Off Swap
+    shell: dphys-swapfile swapoff && dphys-swapfile uninstall && update-rc.d dphys-swapfile remove
+  - name: Add an Apt Kubernetes Deb Key
+    apt_key:
+      url: https://packages.cloud.google.com/apt/doc/apt-key.gpg 
+      state: present
+  - name: Add Kubernetes Repository
+    apt_repository:
+      repo: deb http://apt.kubernetes.io/ kubernetes-xenial main
+      state: present
+  - name: Install kubeadm
+    apt:
+      name: kubeadm

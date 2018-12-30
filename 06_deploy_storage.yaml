@@ -1,0 +1,56 @@
+---
+- hosts: Master
+  become: yes
+  become_method: sudo
+  vars:
+  - remo_user: pi
+  tasks:
+  - name: Install NFS-Packages
+    apt:
+      name: 
+      - nfs-kernel-server
+      - nfs-common
+      state: present
+  - name: Create /export
+    file:
+      path: /export
+      state: directory
+      owner: root
+      group: root
+      mode: 0755
+  - name: Create /export/kube
+    file:
+      path: /export/kube
+      state: directory
+      owner: root
+      group: root
+      mode: 0777
+  - name: Create export data
+    copy:
+        src: ./06_StorageClasses/export
+        dest: /etc/exports
+        owner: root
+        group: root
+        mode: 0755
+  - name: Restart nfs server
+    service: name=nfs-kernel-server state=restarted enabled=yes
+  - name: Copy storage Files
+    copy:
+        src: ./06_StorageClasses/{{ item }}
+        dest: /tmp/{{ item }}
+        mode: 0644
+    with_items:
+    - 00_local-storage.yaml
+    - 01_NFS_Rbac.yaml
+    - 02_NFS_client.yaml
+    - 03_NFS-storage.yaml
+  - name: Deploy Storage
+    shell: kubectl apply -f /tmp/{{ item }}
+    become: no
+    with_items:
+    - 00_local-storage.yaml
+    - 01_NFS_Rbac.yaml
+    - 02_NFS_client.yaml
+    - 03_NFS-storage.yaml
+
+  

@@ -25,4 +25,8 @@
   tasks:
   - name: Reset ipTables
     shell: sysctl net.bridge.bridge-nf-call-iptables=1
+  - name: Update Config
+    shell: sed -e 's/config.yaml\"/config.yaml --read-only-port=10255\"/' /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
+  - name: Reload Services
+    shell: systemctl daemon-reload && systemctl restart kubelet
   

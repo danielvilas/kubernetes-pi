@@ -3,6 +3,8 @@
 Simple ansible scripts for install a Kubernetes Cluster in several Raspberry Pi 3b
 
 Based on vanilla guide of https://github.com/alexellis/k8s-on-raspbian   @2018/12/27
+NFS based on the https://github.com/carlosedp/kubernetes-arm/tree/master/3-NFS_Storage
+
 
 ## Pre-reqs:
 
@@ -44,5 +46,9 @@ ansible-playbook -i hosts -u pi -e token="tokenparam" -e caCertHash="certHashPar
 ansible-playbook -i hosts -u pi 03_basic_init.yaml
 ansible-playbook -i hosts -u pi 04_deploy_traefik.yaml
 ansible-playbook -i hosts -u pi 05_deploy_dashboard.yaml
+ansible-playbook -i hosts -u pi 06_deploy_storage.yaml
+ansible-playbook -i hosts -u pi 07_deploy_heapster.yaml
 
+#Optional, enable master as scheludable node
+kubectl taint nodes --all node-role.kubernetes.io/master-
 ```

@@ -20,7 +20,7 @@ metadata:
     kubernetes.io/ingress.class: traefik
 spec:
   rules:
-  - host: traefik-ui.picluster.apps
+  - host: traefik-ui.apps.picluster
     http:
       paths:
       - path: /

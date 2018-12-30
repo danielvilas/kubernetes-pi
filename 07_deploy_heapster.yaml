@@ -1,0 +1,33 @@
+---
+- hosts: 
+  - Master
+  - Nodes
+  become: yes
+  tasks:
+  - name: Update Config
+    shell: sed -e 's/config.yaml\"/config.yaml --read-only-port=10255\"/' /etc/systemd/system/kubelet.service.d/10-kubeadm.conf
+  - name: Reload Services
+    shell: systemctl daemon-reload && systemctl restart kubelet
+- hosts: Master
+  become: no
+  become_method: sudo
+  vars:
+  - remo_user: pi
+  tasks:
+  - name: Copy Heapster Files
+    copy:
+        src: ./07_Heapster/{{ item }}
+        dest: /tmp/{{ item }}
+        mode: 0644
+    with_items:
+    - 00_InfluxDB.yaml
+    - 01_Rbac.yaml
+    - 02_heapster.yaml
+  - name: Deploy Heapster
+    shell: kubectl apply -f /tmp/{{ item }}
+    with_items:
+    - 00_InfluxDB.yaml
+    - 01_Rbac.yaml
+    - 02_heapster.yaml
+
+  

@@ -1,0 +1,36 @@
+---
+- hosts: 
+  - buildHost
+  become: no
+  vars: 
+  - tmp_build_dir: /tmp/build-ups-influx
+  tasks:
+  - name: Create temp build dir
+    file:
+        path: "{{ tmp_build_dir }}"
+        state: directory
+  - name: CopyFiles
+    copy:
+        src: ./{{ item }}
+        dest: "{{ tmp_build_dir }}/{{ item }}"
+        mode: 0644
+    with_items:
+    - main.c
+    - Dockerfile
+    - influxdb.h
+  - name: Compile
+    shell: gcc main.c -o ups-hat-influx
+    args:
+      chdir: "{{tmp_build_dir}}"
+  - name: Clear Image
+    docker_image:
+      state: absent
+      name: danielvilas/ups-hat-influx
+      tag: v0.0.2
+  - name: Build Image
+    docker_image:
+      path: "{{tmp_build_dir}}"
+      name: danielvilas/ups-hat-influx
+      tag: v0.0.2
+      push: yes
+      

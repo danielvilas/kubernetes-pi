@@ -1,0 +1,42 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: ups-hat-influx
+  namespace: kube-system
+---
+apiVersion: extensions/v1beta1
+kind: DaemonSet
+metadata:
+  name: ups-hat-influx
+  namespace: kube-system
+spec:
+  template:
+    metadata:
+      labels:
+        task: monitoring
+        k8s-app: ups-hat-influx
+    spec:
+      serviceAccountName: ups-hat-influx
+      tolerations:
+      - key: node-role.kubernetes.io/master
+        effect: NoSchedule
+      nodeSelector:
+        UpsHat: "yes"
+      containers:
+      - name: ups-hat-influx
+        image: danielvilas/ups-hat-influx:v0.0.2
+        imagePullPolicy: IfNotPresent
+        securityContext:
+          privileged: true
+        resources:
+          limits:
+            memory: 100Mi
+          requests:
+            cpu: 100m
+            memory: 10Mi
+        env:
+        - name: MY_NODE_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+      

@@ -44,6 +44,8 @@ ansible-playbook -i hosts -u pi -e token="tokenparam" -e caCertHash="certHashPar
 
 #Complete the cluster deployment
 ansible-playbook -i hosts -u pi 03_basic_init.yaml
+
+#Wait until daemons reloads and install services
 ansible-playbook -i hosts -u pi 04_deploy_traefik.yaml
 ansible-playbook -i hosts -u pi 05_deploy_dashboard.yaml
 ansible-playbook -i hosts -u pi 06_deploy_storage.yaml

@@ -1,20 +1,3 @@
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: influxdb-pv-claim
-  namespace: kube-system
-  labels:
-    k8s-app: influxdb
-    task: monitoring
-  annotations:
-    volume.beta.kubernetes.io/storage-class: "nfs-master"
-spec:
-  accessModes:
-  - ReadWriteOnce
-  resources:
-    requests:
-      storage: 5Gi
----
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
@@ -36,9 +19,10 @@ spec:
           name: influxdb-storage
       volumes:
       - name: influxdb-storage
-        persistentVolumeClaim:
-          claimName: influxdb-pv-claim
-
+        glusterfs:
+          endpoints: glusterfs-cluster
+          path: gv0
+          readOnly: false
 ---
 apiVersion: v1
 kind: Service

@@ -1,0 +1,25 @@
+sudo apt-get install glusterfs-server
+ssh pi@masterpi sudo apt-get install glusterfs-server
+ssh pi@nodepi1 sudo apt-get install glusterfs-server
+ssh pi@nodepi2 sudo apt-get install glusterfs-server
+
+sudo mkdir -p /data/brick1
+ssh pi@masterpi sudo mkdir -p /data/brick1
+ssh pi@nodepi1 sudo mkdir -p /data/brick1
+ssh pi@nodepi2 sudo mkdir -p /data/brick1
+
+gluster peer probe masterpi
+gluster peer probe nodepi1
+gluster peer probe nodepi2
+
+sudo mkdir /data/brick1/gv0
+ssh pi@masterpi sudo mkdir -p /data/brick1/gv0
+ssh pi@nodepi1 sudo mkdir -p /data/brick1/gv0
+ssh pi@nodepi2 sudo mkdir -p /data/brick1/gv0
+
+gluster volume create gv0 replica 2 node1:/data/brick1/gv0 node2:/data/brick1/gv0
+gluster volume start gv0
+
+ git clone https://github.com/gluster/gluster-kubernetes
+ cd gluster-kubernetes/deploy
+ 

@@ -53,4 +53,15 @@ ansible-playbook -i hosts -u pi 07_deploy_heapster.yaml
 
 #Optional, enable master as scheludable node
 kubectl taint nodes --all node-role.kubernetes.io/master-
+
+#Configure Hat
+kubectl label nodes nodepi1 UpsHat=yes
+kubectl label nodes nodepi2 UpsHat=yes
+kubectl apply -f 08_I2CBatery/01_deploy.yaml
+
+#
+
+
 ```
+
+

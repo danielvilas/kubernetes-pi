@@ -4,13 +4,18 @@ metadata:
   name: heapster
   namespace: kube-system
 ---
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: heapster
   namespace: kube-system
+  labels:
+    k8s-app: heapster
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      k8s-app: heapster
   template:
     metadata:
       labels:

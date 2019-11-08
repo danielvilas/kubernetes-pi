@@ -4,12 +4,17 @@ metadata:
   name: ups-hat-influx
   namespace: kube-system
 ---
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: DaemonSet
 metadata:
   name: ups-hat-influx
   namespace: kube-system
+  labels:
+    k8s-app: ups-hat-influx
 spec:
+  selector:
+    matchLabels:
+      k8s-app: ups-hat-influx
   template:
     metadata:
       labels:

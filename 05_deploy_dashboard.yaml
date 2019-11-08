@@ -3,7 +3,7 @@
   become: no
   become_method: sudo
   vars:
-  - dashboard_version: v1.10.1
+  - dashboard_version: v2.0.0-beta5
   tasks:
   - name: Copy Dashboard Service File
     copy:
@@ -16,6 +16,6 @@
   - name: Deploy RoleBinding
     shell: kubectl apply -f /tmp/00_RoleBinding.yaml
   - name: Deploy Dashboard
-    shell: kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/{{ dashboard_version }}/src/deploy/alternative/kubernetes-dashboard-arm.yaml
+    shell: kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/{{ dashboard_version }}/aio/deploy/alternative.yaml
   - name: Deploy Ingress
     shell: kubectl apply -f /tmp/02_Ingress.yaml

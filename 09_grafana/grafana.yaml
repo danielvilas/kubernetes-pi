@@ -1,15 +1,18 @@
-apiVersion: extensions/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: grafana
+    k8s-app: grafana
   name: grafana-deployment
 spec:
   replicas: 1
+  selector:
+    matchLabels:
+      k8s-app: grafana
   template:
     metadata:
       labels:
-        app: grafana
+        k8s-app: grafana
     spec:
       volumes:
       - name: grafana-pv
@@ -42,11 +45,11 @@ kind: Service
 metadata:
   name: grafana-service
   annotations:
-      app: grafana
+      k8s-app: grafana
 spec:
   type: ClusterIP 
   selector:
-    app: grafana
+    k8s-app: grafana
   ports:
   - port: 3000
     targetPort: 3000
@@ -58,7 +61,7 @@ metadata:
   name: grafana-ui
   annotations:
     kubernetes.io/ingress.class: traefik
-    app: grafana
+    k8s-app: grafana
 spec:
   rules:
   - host: grafana.apps.picluster

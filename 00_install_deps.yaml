@@ -5,7 +5,7 @@
   become: yes
   become_method: sudo
   vars:
-    - docker_version: 18.06
+    - docker_version: 19.03.5
   tasks:
   - name: Download Docker Installer
     get_url:

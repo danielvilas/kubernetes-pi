@@ -59,7 +59,11 @@ kubectl label nodes nodepi1 UpsHat=yes
 kubectl label nodes nodepi2 UpsHat=yes
 kubectl apply -f 08_I2CBatery/01_deploy.yaml
 
-#
+#update
+sudo rpi-update
+sudo update-alternatives --set iptables /usr/sbin/iptables-legacy
+sudo update-alternatives --set ip6tables /usr/sbin/ip6tables-legacy
+sudo reboot
 
 
 ```

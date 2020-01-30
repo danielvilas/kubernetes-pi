@@ -1,0 +1,8 @@
+in /boot/config add
+
+<<
+hdmi_group=2
+hdmi_mode=87
+hdmi_drive=1
+hdmi_cvt 800 480 60 6 0 0 0
+>>

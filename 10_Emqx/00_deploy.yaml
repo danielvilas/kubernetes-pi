@@ -115,6 +115,7 @@ apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
   name: emqx-dashboard
+  namespace: emqx  
   annotations:
     kubernetes.io/ingress.class: traefik
     app: emqx

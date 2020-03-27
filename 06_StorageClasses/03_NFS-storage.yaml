@@ -1,7 +1,0 @@
-apiVersion: storage.k8s.io/v1beta1
-kind: StorageClass
-metadata:
-  name: nfs-master
-  annotations:
-    storageclass.kubernetes.io/is-default-class: true
-provisioner: nfs-provisioner/master

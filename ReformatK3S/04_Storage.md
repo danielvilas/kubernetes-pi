@@ -63,18 +63,18 @@ sudo mount /var/lib/rancher/k3s/storage
 sudo reboot
 
 ssh pi@nodepi1
-sudo sh -c "echo nodepi1.local:/gv_kubesystem /var/lib/rancher/k3s/storage glusterfs defaults,noatime 0 1 >> /etc/fstab"
+sudo sh -c "echo nodepi1.local:/gv_kubesystem /var/lib/rancher/k3s/storage glusterfs defaults,_netdev,noauto,x-systemd.automount 0 1 >> /etc/fstab"
 sudo mount /var/lib/rancher/k3s/storage
 sudo reboot
 
 
 ssh pi@nodepi2
-sudo sh -c "echo nodepi2.local:/gv_kubesystem /var/lib/rancher/k3s/storage glusterfs defaults,noatime 0 1 >> /etc/fstab"
+sudo sh -c "echo nodepi2.local:/gv_kubesystem /var/lib/rancher/k3s/storage glusterfs defaults,_netdev,noauto,x-systemd.automount 0 1 >> /etc/fstab"
 sudo mount /var/lib/rancher/k3s/storage
 sudo reboot
 
 ssh pi@nodepi3
-sudo sh -c "echo nodepi3.local:/gv_kubesystem /var/lib/rancher/k3s/storage glusterfs defaults,noatime 0 1 >> /etc/fstab"
+sudo sh -c "echo nodepi3.local:/gv_kubesystem /var/lib/rancher/k3s/storage glusterfs defaults,_netdev,noauto,x-systemd.automount 0 1 >> /etc/fstab"
 mount /var/lib/rancher/k3s/storage
 sudo reboot
 

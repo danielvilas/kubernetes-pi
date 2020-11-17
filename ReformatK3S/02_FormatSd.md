@@ -145,9 +145,9 @@ interface eth0
 static ip_address=192.168.1.2/24
 #static ip6_address=fd51:42f8:caae:d92e::ff/64
 static routers=192.168.1.1
-static domain_name_servers=192.168.1.2 8.8.8.8 
 static domain_name=local
 static domain_search=local picluster
+static domain_name_servers=192.168.1.2 8.8.8.8 
 ```
 search network
 

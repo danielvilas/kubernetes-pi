@@ -4,24 +4,24 @@ As Shared Storage we gona use an GlusterFS Storage
 ## Servers
 
 ```
-ssh pi@masterpi sudo apt-get install glusterfs-server -y
-ssh pi@nodepi1 sudo apt-get install glusterfs-server -y
-ssh pi@nodepi2 sudo apt-get install glusterfs-server -y
+ssh pi@masterpi sudo apt-get install glusterfs-server -y ; \
+ssh pi@nodepi1 sudo apt-get install glusterfs-server -y ; \
+ssh pi@nodepi2 sudo apt-get install glusterfs-server -y ; \
 ssh pi@nodepi3 sudo apt-get install glusterfs-server -y
 
-ssh pi@masterpi sudo systemctl enable glusterd
-ssh pi@nodepi1 sudo systemctl enable glusterd
-ssh pi@nodepi2 sudo systemctl enable glusterd
-ssh pi@nodepi3 sudo systemctl enable glusterd
+ssh pi@masterpi sudo systemctl enable glusterd ; \
+ssh pi@nodepi1 sudo systemctl enable glusterd ; \
+ssh pi@nodepi2 sudo systemctl enable glusterd ; \
+ssh pi@nodepi3 sudo systemctl enable glusterd 
 
-ssh pi@masterpi sudo systemctl disable dphys-swapfile.service
-ssh pi@nodepi1 sudo systemctl disable dphys-swapfile.service 
-ssh pi@nodepi2 sudo systemctl disable dphys-swapfile.service 
+ssh pi@masterpi sudo systemctl disable dphys-swapfile.service ; \
+ssh pi@nodepi1 sudo systemctl disable dphys-swapfile.service ; \
+ssh pi@nodepi2 sudo systemctl disable dphys-swapfile.service ; \
 ssh pi@nodepi3 sudo systemctl disable dphys-swapfile.service
 
-ssh pi@masterpi sudo reboot 
-ssh pi@nodepi1 sudo reboot 
-ssh pi@nodepi2 sudo reboot 
+ssh pi@masterpi sudo reboot ; \
+ssh pi@nodepi1 sudo reboot ; \
+ssh pi@nodepi2 sudo reboot ; \
 ssh pi@nodepi3 sudo reboot
 
 ssh pi@masterpi sudo mkdir -p /data/brick1/gv_kubesystem ; \

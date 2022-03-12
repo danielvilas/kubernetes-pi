@@ -12,7 +12,7 @@ sudo su
 diskutil list
 # the SD is in disk2
 diskutil umountdisk disk2
-sudo sh -c "dd if=2020-02-13-raspbian-buster-full.img bs=1024k | pv| dd bs=1024k of=/dev/rdisk2"
+sudo sh -c "dd if=2022-01-28-raspios-bullseye-arm64.img bs=1024k | pv| dd bs=1024k of=/dev/rdisk2"
 touch /Volumes/boot/ssh
 diskutil eject disk2
 
@@ -47,7 +47,7 @@ sudo reboot
 diskutil list
 # the SD is in disk2
 diskutil umountdisk disk2
-sudo sh -c "dd if=2020-02-13-raspbian-buster-full.img bs=1024k | pv| dd bs=1024k of=/dev/rdisk2"
+sudo sh -c "dd if=2022-01-28-raspios-bullseye-arm64.img bs=1024k | pv| dd bs=1024k of=/dev/rdisk2"
 
 #connect the Rpi and wait, Router gives .42
 ssh pi@192.168.1.42
@@ -78,7 +78,7 @@ sudo apt-get autoremove
 diskutil list
 # the SD is in disk2
 diskutil umountdisk disk2
-sudo sh -c "dd if=2020-02-13-raspbian-buster-full.img bs=1024k | pv| dd bs=1024k of=/dev/rdisk2"
+sudo sh -c "dd if=2022-01-28-raspios-bullseye-arm64.img bs=1024k | pv| dd bs=1024k of=/dev/rdisk2"
 
 #connect the Rpi and wait, Router gives .45
 ssh pi@192.168.1.45
@@ -110,7 +110,7 @@ sudo reboot
 diskutil list
 # the SD is in disk2
 diskutil umountdisk disk2
-sudo sh -c "dd if=2020-02-13-raspbian-buster-full.img bs=1024k | pv| dd bs=1024k of=/dev/rdisk2"
+sudo sh -c "dd if=2022-01-28-raspios-bullseye-arm64.img bs=1024k | pv| dd bs=1024k of=/dev/rdisk2"
 
 #connect the Rpi and wait, Router gives .44
 ssh pi@192.168.1.44

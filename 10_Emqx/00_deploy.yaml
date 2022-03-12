@@ -83,7 +83,7 @@ metadata:
   name: emqx-sa
 ---
 kind: Role
-apiVersion: rbac.authorization.k8s.io/v1beta1
+apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   namespace: emqx
   name: emqx-role
@@ -98,7 +98,7 @@ rules:
   - list
 ---
 kind: RoleBinding
-apiVersion: rbac.authorization.k8s.io/v1beta1
+apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   namespace: emqx
   name: emqx-rb
@@ -111,7 +111,7 @@ roleRef:
   name: emqx-role
   apiGroup: rbac.authorization.k8s.io
 ---
-apiVersion: extensions/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: emqx-dashboard
@@ -124,6 +124,10 @@ spec:
   - host: emqx.apps.picluster
     http:
       paths:
-      - backend:
-          serviceName: emqx
-          servicePort: 18083
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: emqx
+            port: 
+              number: 18083

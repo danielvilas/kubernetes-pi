@@ -47,6 +47,11 @@ spec:
         volumeMounts:
           - name: logs
             mountPath: /opt/emqx/log/
+        resources:
+          limits:
+            memory: 512Mi
+          requests:
+            memory: 256Mi    
       serviceAccount: emqx-sa  
       volumes:
         - name: logs
@@ -74,6 +79,24 @@ spec:
     nodePort: 30083
     port: 18083
     targetPort: 18083
+    protocol: TCP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: emqx-lb
+  labels:
+    name: emqx-lb
+    app: emqx
+  namespace: emqx
+spec:
+  selector:
+    app: emqx
+  type: LoadBalancer
+  ports:
+  - name: mqtt
+    port: 1883
+    targetPort: 1883
     protocol: TCP
 ---
 apiVersion: v1

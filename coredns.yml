@@ -3,7 +3,7 @@
   become: yes
   become_method: sudo
   vars:
-    coredns_ver: "1.6.7"
+    coredns_ver: "1.9.3"
     arch: "arm"
 #    arch: "amd64"
   tasks:

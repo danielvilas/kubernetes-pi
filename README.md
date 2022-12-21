@@ -8,7 +8,7 @@ NFS based on the https://github.com/carlosedp/kubernetes-arm/tree/master/3-NFS_S
 
 ## Pre-reqs:
 
-* You must use an RPi 2 or 3 for use with Kubernetes
+* You must use an RPi 3 or 4 for use with Kubernetes
 * I'm assuming you're using wired ethernet (Wi-Fi also works, but it's not recommended)
 * all nodes have static ip
 * And the locale set
@@ -28,44 +28,15 @@ Node2  -> 192.168.1.12 -> nodepi2.local, kubenode2.picluster
 ```
 Edit inventory file (hosts) as needed
 
-You can install the coreDns with
-```
-ansible-playbook -u pi -i hosts -l server coredns.yml
-```
-## Install Kubernetes
-```
-#Configure the hosts
-ansible-playbook -i hosts -u pi 00_install_deps.yaml
+## Create the ServerPi node
 
-#Create the cluster
-ansible-playbook -i hosts -u pi 01_init_master.yaml
-#Use the output to fill the parameters
-ansible-playbook -i hosts -u pi -e token="tokenparam" -e caCertHash="certHashParam" 02_init_nodes.yaml 
+The manager will be another Rpi, used as "main" server, will provide the CoreDNS server
+("external" DNS) and several personal services for home authomation (HTTP, MiniDLNA,...)
 
-#Complete the cluster deployment
-ansible-playbook -i hosts -u pi 03_basic_init.yaml
+See [ServerPi creation](serverpi/Readme.MD).
 
-#Wait until daemons reloads and install services
-ansible-playbook -i hosts -u pi 04_deploy_traefik.yaml
-ansible-playbook -i hosts -u pi 05_deploy_dashboard.yaml
-ansible-playbook -i hosts -u pi 06_deploy_storage.yaml
-ansible-playbook -i hosts -u pi 07_deploy_heapster.yaml
+## Create the MasterPi Node and the rest of the nodes
 
-#Optional, enable master as scheludable node
-kubectl taint nodes --all node-role.kubernetes.io/master-
-
-#Configure Hat
-kubectl label nodes nodepi1 UpsHat=yes
-kubectl label nodes nodepi2 UpsHat=yes
-kubectl apply -f 08_I2CBatery/01_deploy.yaml
-
-#update
-sudo rpi-update
-sudo update-alternatives --set iptables /usr/sbin/iptables-legacy
-sudo update-alternatives --set ip6tables /usr/sbin/ip6tables-legacy
-sudo reboot
-
-
-```
-
+MasterPi will have the K3S master node
+See [Nodes Creation](nodes/Readme.MD)
 

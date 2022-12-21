@@ -1,0 +1,21 @@
+- hosts:
+  - Master 
+  tasks:
+  - name: Add a repository
+    kubernetes.core.helm_repository:
+      name: kubernetes-dashboard 
+      repo_url: https://kubernetes.github.io/dashboard/
+  - name: Deploy latest version of dashboard
+    kubernetes.core.helm:
+      name: kubernetes-dashboard
+      chart_ref: kubernetes-dashboard/kubernetes-dashboard
+      release_namespace: kubernetes-dashboard
+      create_namespace: true
+      values:
+        extraArgs:
+        - --enable-insecure-login
+        protocolHttp: true
+        ingress:
+          enabled: true
+          hosts:
+          - kubernetes-dashboard.apps.picluster

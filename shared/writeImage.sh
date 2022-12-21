@@ -2,7 +2,7 @@
 
 helpUse()
 {
-    echo $0 img /dev/[disc] name
+    echo $0 img /dev/{disc} name [User] [passwd]
 }
 
 if [[ -z $1 ]]
@@ -23,6 +23,24 @@ IMG=$1
 DISC=$2
 NAME=$3
 
+PIUSER=$USER
+PASSWORD=raspberry
+
+if [[ -z $4 ]]
+then
+    PIUSER=$USER
+else
+    PIUSER=$4
+fi
+
+if [[ -z $5 ]]
+then
+    PASSWORD=raspberry
+else
+    PASSWORD=$5
+fi
+echo  Generating user $PIUSER/$PASSWORD
+
 sudo umount $DISC*
 
 dd if=$IMG | pv| dd bs=1024k of=$2
@@ -30,12 +48,12 @@ dd if=$IMG | pv| dd bs=1024k of=$2
 sync
 
 
-pass=$(echo 'raspberry' | openssl passwd -6 -stdin)
+pass=$(echo $PASSWORD | openssl passwd -6 -stdin)
 
 mount ${DISC}1 /mnt 
 touch /mnt/ssh
 touch /mnt/$NAME
-echo "pi:$pass">/mnt/userconf
+echo "$PIUSER:$pass">/mnt/userconf
 cat /mnt/userconf
 umount /mnt
 

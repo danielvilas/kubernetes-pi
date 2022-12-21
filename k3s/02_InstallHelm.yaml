@@ -1,0 +1,19 @@
+- hosts:
+  - Master 
+  become: yes
+  become_method: sudo
+  # ansible-galaxy install geerlingguy.helm
+  roles:
+    - role: geerlingguy.helm
+      vars:
+        helm_arch: arm64
+        helm_version: 'v3.10.3'
+  tasks:
+  - name: Install pip3
+    apt:
+      name: 
+      - python3-pip
+  - name: Install yaml python package
+    ansible.builtin.pip:
+      name: pyyaml
+  

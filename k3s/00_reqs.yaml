@@ -1,0 +1,29 @@
+- hosts:
+  - Master 
+  - Nodes
+  become: yes
+  become_method: sudo
+  
+  tasks:
+  - set_fact:
+      cmdline_txt_path: /boot/cmdline.txt
+  - include_tasks: cmdline.yaml
+    vars:
+      key: cgroup_enable
+      value: memory
+      update: false
+  - include_tasks: cmdline.yaml
+    vars:
+      key: cgroup_enable
+      value: cpu
+      update: false
+  - include_tasks: cmdline.yaml
+    vars:
+      key: cgroup_memory
+      value: 1
+      update: true
+  - name: Reboot the raspberries 
+    reboot:
+      reboot_timeout: 300
+       
+  

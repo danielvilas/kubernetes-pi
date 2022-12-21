@@ -1,0 +1,14 @@
+---
+- hosts:
+  - Master
+  - Nodes
+  become: yes
+  become_method: sudo
+  tasks:
+  - name: update
+    apt:
+      update-cache: yes
+  - name: Upgrade
+    apt:
+      upgrade: full
+      autoremove: yes

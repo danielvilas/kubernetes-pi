@@ -1,5 +1,7 @@
 *.retry
 System
 .DS_Store
-Reinstall202011/*.img
-Reinstall202011/*.zip
+k3s/k3s.config
+nodes/*.img
+serverpi/*.img
+hosts.local

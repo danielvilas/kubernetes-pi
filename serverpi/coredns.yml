@@ -27,6 +27,7 @@
     with_items:
     - Corefile
     - db.picluster
+    - db.local
 
   - name: Copy CoreDNS Service File
     become: yes
@@ -56,3 +57,6 @@
         name: coredns
         enabled: yes
         state: started
+  - name: Install dnsutils
+    apt:
+      name: dnsutils

@@ -1,0 +1,15 @@
+- hosts:
+  - Master 
+  - Nodes
+  become: yes
+  become_method: sudo
+  
+  tasks:
+  - name: Install Deps
+    apt:
+      name: 
+      - jq 
+      - open-iscsi
+      - nfs-common
+       
+  

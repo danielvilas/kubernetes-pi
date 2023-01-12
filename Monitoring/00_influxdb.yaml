@@ -1,0 +1,17 @@
+- hosts:
+  - Master 
+  tasks:
+  - name: Install InfluxDB PVC
+    kubernetes.core.k8s:
+      state: present
+      definition: "{{ lookup('file', '00_InfluxDB.pvc.yaml') | from_yaml }}"
+  - name: Install InfluxDB deployment
+    kubernetes.core.k8s:
+      state: present
+      definition: "{{ lookup('file', '01_InfluxDB.deploy.yaml') | from_yaml }}"
+  - name: Install InfluxDB service
+    kubernetes.core.k8s:
+      state: present
+      definition: "{{ lookup('file', '02_InfluxDB.service.yaml') | from_yaml }}"
+
+

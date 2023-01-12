@@ -1,0 +1,108 @@
+- hosts:
+  - Master 
+  tasks:
+  - name: Create a k8s namespace
+    k8s:
+      name: kubernetes-dashboard 
+      api_version: v1
+      kind: Namespace
+      state: present
+  - name: Create dashboard Cert
+    kubernetes.core.k8s:
+      namespace: kubernetes-dashboard
+      definition:
+        apiVersion: cert-manager.io/v1
+        kind: Certificate
+        metadata:
+          name: kdb-external-cert
+          namespace: kubernetes-dashboard
+        spec:
+          # Secret names are always required.
+          secretName: kdb-external-tls
+          duration: 2160h # 90d
+          renewBefore: 360h # 15d
+          subject:
+            organizations:
+              - picluster
+          # The use of the common name field has been deprecated since 2000 and is
+          # discouraged from being used.
+          commonName: kubernetes-dashboard.apps.picluster
+          isCA: false
+          privateKey:
+            algorithm: RSA
+            encoding: PKCS1
+            size: 2048
+          usages:
+            - server auth
+            - client auth
+          # At least one of a DNS Name, URI, or IP address is required.
+          dnsNames:
+            - kubernetes-dashboard.apps.picluster
+            - kubernetes-dashboard
+          # Issuer references are always required.
+          issuerRef:
+            name: picluster-ca-issuer
+            # We can reference ClusterIssuers by changing the kind here.
+            # The default value is Issuer (i.e. a locally namespaced Issuer)
+            kind: ClusterIssuer
+            # This is optional since cert-manager will default to this value however
+            # if you are using an external issuer, change this to that issuer group.
+            group: cert-manager.io
+  - name: Add a repository
+    kubernetes.core.helm_repository:
+      name: kubernetes-dashboard 
+      repo_url: https://kubernetes.github.io/dashboard/
+  - name: Deploy latest version of dashboard
+    kubernetes.core.helm:
+      name: kubernetes-dashboard
+      chart_ref: kubernetes-dashboard/kubernetes-dashboard
+      release_namespace: kubernetes-dashboard
+      create_namespace: false
+      values:
+        extraArgs:
+        - --enable-insecure-login
+        protocolHttp: true
+        service:
+          externalPort: 80
+        ingress:
+          enabled: true
+          hosts:
+          - kubernetes-dashboard.apps.picluster
+          tls:
+          - secretName: kdb-external-tls
+            hosts:
+            - kubernetes-dashboard.apps.picluster
+  - name: Create dashboard user
+    kubernetes.core.k8s:
+      namespace: kubernetes-dashboard
+      definition:
+        apiVersion: v1
+        kind: ServiceAccount
+        metadata:
+          name: admin-user
+          namespace: kubernetes-dashboard
+  - name: Create dashboard RoleBinding
+    kubernetes.core.k8s:
+      namespace: kubernetes-dashboard
+      definition:
+        apiVersion: rbac.authorization.k8s.io/v1
+        kind: ClusterRoleBinding
+        metadata:
+          name: admin-user
+        roleRef:
+          apiGroup: rbac.authorization.k8s.io
+          kind: ClusterRole
+          name: cluster-admin
+        subjects:
+        - kind: ServiceAccount
+          name: admin-user
+          namespace: kubernetes-dashboard
+  - name: CreateToken
+    command: kubectl -n kubernetes-dashboard create token admin-user
+    become: yes
+    register: adminToken
+
+  - name: Print Token
+    ansible.builtin.debug:
+      msg:
+      - "{{ adminToken.stdout }}"

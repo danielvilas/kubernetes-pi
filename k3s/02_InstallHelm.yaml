@@ -16,4 +16,6 @@
   - name: Install yaml python package
     ansible.builtin.pip:
       name: pyyaml
-  
+  - name: Install kubernetes python package
+    ansible.builtin.pip:
+      name: kubernetes

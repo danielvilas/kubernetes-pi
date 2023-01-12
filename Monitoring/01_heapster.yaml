@@ -1,0 +1,25 @@
+- hosts:
+  - Master 
+  tasks:
+  - name: Install Heaptster role
+    kubernetes.core.k8s:
+      state: present
+      definition: "{{ lookup('file', '03_heapster.Rbac.yaml') | from_yaml }}"
+  - name: Install Heaptster rolebinding
+    kubernetes.core.k8s:
+      state: present
+      definition: "{{ lookup('file', '04_heapster.roleb.yaml') | from_yaml }}"
+  - name: Install Heaptster service account
+    kubernetes.core.k8s:
+      state: present
+      definition: "{{ lookup('file', '05_heapster.sa.yaml') | from_yaml }}"
+  - name: Install Heaptster deployment
+    kubernetes.core.k8s:
+      state: present
+      definition: "{{ lookup('file', '06_heapster.deploy.yaml') | from_yaml }}"
+  - name: Install Heaptster service
+    kubernetes.core.k8s:
+      state: present
+      definition: "{{ lookup('file', '07_heapster.service.yaml') | from_yaml }}"
+
+

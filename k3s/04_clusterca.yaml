@@ -1,0 +1,43 @@
+- hosts:
+  - Master 
+  tasks:
+  - name: Create SelfSignedIssuer
+    kubernetes.core.k8s:
+      namespace: cert-manager
+      definition:
+        apiVersion: cert-manager.io/v1
+        kind: ClusterIssuer
+        metadata:
+          name: selfsigned-issuer
+        spec:
+          selfSigned: {}
+  - name: Create Ca Cert
+    kubernetes.core.k8s:
+      namespace: cert-manager
+      definition:
+        apiVersion: cert-manager.io/v1
+        kind: Certificate
+        metadata:
+          name: picluster-ca
+        spec:
+          isCA: true
+          commonName: picluster-ca
+          secretName: root-secret
+          privateKey:
+            algorithm: ECDSA
+            size: 256
+          issuerRef:
+            name: selfsigned-issuer
+            kind: ClusterIssuer
+            group: cert-manager.io
+  - name: Create ClusterIssuer
+    kubernetes.core.k8s:
+      namespace: cert-manager
+      definition:
+        apiVersion: cert-manager.io/v1
+        kind: ClusterIssuer
+        metadata:
+          name: picluster-ca-issuer
+        spec:
+          ca:
+            secretName: root-secret

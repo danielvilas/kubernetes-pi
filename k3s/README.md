@@ -35,6 +35,8 @@ kubectl --kubeconfig=k3s.config get nodes
 ```
 
 ansible-playbook -i ../hosts 02_InstallHelm.yaml
-ansible-playbook -i ../hosts 03_dashboard.yaml
+ansible-playbook -i ../hosts 03_certmanager.yaml
+ansible-playbook -i ../hosts 04_clusterca.yaml
+ansible-playbook -i ../hosts 05_dashboard.yaml
 
 ```

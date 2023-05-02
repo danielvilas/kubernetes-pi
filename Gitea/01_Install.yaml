@@ -1,0 +1,25 @@
+- hosts:
+  - Master 
+  tasks:
+  - name: Add a repository
+    kubernetes.core.helm_repository:
+      name: gitea-charts
+      repo_url: https://dl.gitea.io/charts/
+  - name: Deploy latest version of gitea
+    kubernetes.core.helm:
+      name: gitea
+      chart_ref: gitea-charts/gitea
+      release_namespace: gitea
+      create_namespace: true
+      values:
+        ingress:
+          enabled: true
+          hosts:
+          - host: gitea.apps.picluster
+            paths:
+            - path: /
+              pathType: Prefix
+        gitea:
+          admin:
+            password: r8sA8CPHD9!bt6d
+

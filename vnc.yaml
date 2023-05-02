@@ -1,0 +1,88 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    k8s-app: vnc-server
+  name: vnc-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      k8s-app: vnc-server 
+  template:
+    metadata:
+      labels:
+        k8s-app: vnc-server
+    spec:
+      containers:
+      - name: vnc-server
+        image: dorowu/ubuntu-desktop-lxde-vnc:focal-arm64
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 80
+        - containerPort: 5900
+        resources:
+          limits:
+            cpu: 500m
+            memory: 2500Mi
+          requests:
+            cpu: 100m
+            memory: 100Mi
+        env:
+        - name: GF_PATHS_DATA 
+          value: /vnc-server-data/vnc-server
+        - name: RESOLUTION
+          value: "1920x1080"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: vnc-server-service
+  annotations:
+      k8s-app: vnc-server
+spec:
+  type: ClusterIP 
+  selector:
+    k8s-app: vnc-server
+  ports:
+  - port: 80
+    targetPort: 80
+    name: vnc-server-port
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: vnc-server-viewer
+  annotations:
+      k8s-app: vnc-server
+spec:
+  type: NodePort 
+  selector:
+    k8s-app: vnc-server
+  ports:
+  - port: 5900
+    targetPort: 5900
+    nodePort: 30900
+    name: vnc-server-port
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: vnc-server-ui
+  annotations:
+    kubernetes.io/ingress.class: traefik
+    k8s-app: vnc-server
+spec:
+  rules:
+  - host: vnc-server.apps.picluster
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: vnc-server-service
+            port:
+              number: 80

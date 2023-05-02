@@ -2,6 +2,7 @@
 - hosts:
   - Master
   - Nodes
+  - server
   become: yes
   become_method: sudo
   tasks:
